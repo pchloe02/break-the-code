@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Break the code</title>
+  </head>
+  <body>
+
+    </div>
+    <h1>Break the code to defuse the bomb</h1>
+    <p>
+      Click on <strong>Verify</strong> to ensure your code is correct, if the
+      screen display <span style="color: red">red</span> the letter position is
+      wrong else if the screen display
+      <span style="color: green">green</span> the letter position is good
+    </p>
+    <div id="bomb-container" class="bomb">
+      <div class="timer-container">
+        <div id="timer" class="timer">1:00</div>
+        <button id="start-btn">Start</button>
+        <div id="attempt-screen"></div>
+      </div>
+      <div class="form-code-container">
+        <form id="form-code" class="form-code">
+          <div class="inputs-container">
+            <div class="input-group n1">
+              <button type="button" class="arrow-up">&#9650;</button>
+              <input
+                type="text"
+                class="code-input"
+                autocomplete="off"
+                maxlength="1"
+              />
+              <button type="button" class="arrow-down">&#9660;</button>
+            </div>
+            <div class="input-group n2">
+              <button type="button" class="arrow-up">&#9650;</button>
+              <input
+                type="text"
+                class="code-input"
+                autocomplete="off"
+                maxlength="1"
+              />
+              <button type="button" class="arrow-down">&#9660;</button>
+            </div>
+            <div class="input-group n3">
+              <button type="button" class="arrow-up">&#9650;</button>
+              <input
+                type="text"
+                class="code-input"
+                autocomplete="off"
+                maxlength="1"
+              />
+              <button type="button" class="arrow-down">&#9660;</button>
+            </div>
+            <div class="input-group n4">
+              <button type="button" class="arrow-up">&#9650;</button>
+              <input
+                type="text"
+                class="code-input"
+                autocomplete="off"
+                maxlength="1"
+              />
+              <button type="button" class="arrow-down">&#9660;</button>
+            </div>
+          </div>
+
+          <button type="submit">Submit</button>
+        </form>
+        <p id="message"></p>
+      </div>
+    </div>
+        <div id="success-message" class="message"></div>
+    <div id="error-message" class="message"></div>
+    <div id="agent-computer" class="computer">
+      <div id="screen" class="screen">
+        <div id="verify-first-letter" class="screen-letter first"></div>
+        <div id="verify-second-letter" class="screen-letter second"></div>
+        <div id="verify-third-letter" class="screen-letter third"></div>
+        <div id="verify-fourth-letter" class="screen-letter fourth"></div>
+      </div>
+      <button id="verify-button">Verify</button>
+    </div>
+  </body>
+</html>
+<script src="functions.js" type="module"></script>
+<script src="script.js" type="module"></script>
+<script src="constant.js" type="module"></script>
