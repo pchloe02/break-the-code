@@ -1,5 +1,3 @@
-import { getTheCode } from "./functions.js";
-
 export const data = {
   alphabet: [
     "A",

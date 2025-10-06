@@ -20,12 +20,15 @@ export const getInputsValues = (inputCode) => {
 export const checkTheCode = (
   playerCode,
   generateRandomCode,
-  inputsCode,
-  message
+  message,
+  stopTimer,
+  getTimer
 ) => {
   if (playerCode.length === 4) {
     if (playerCode === generateRandomCode) {
-      console.log("Code is correct!");
+      stopTimer();
+      localStorage.setItem("time-remaining", getTimer());
+
       message.successMessage.textContent =
         "Congratulations, you have defused the bomb!";
       message.successMessage.style.color = "#4bff4b";
@@ -38,22 +41,18 @@ export const checkTheCode = (
         .querySelectorAll("input")
         .forEach((input) => (input.disabled = true));
     } else {
-      console.log("Code is incorrect.");
       message.errorMessage.textContent =
-        "Game over, you failed to defuse the bomb.";
+        "The code is incorrect, please try again.";
       message.successMessage.textContent = "";
     }
   }
 };
 
 export const verifyCode = (playerCode, generateRandomCode, verifyLetters) => {
-  console.clear();
   for (let i = 0; i < 4; i++) {
     if (playerCode[i] === generateRandomCode[i]) {
-      console.log(`Lettre correcte à la position ${i + 1}: ${playerCode[i]}`);
       verifyLetters[i].style.backgroundColor = "#4bff4bff";
     } else {
-      console.log(`Lettre incorrecte à la position ${i + 1}: ${playerCode[i]}`);
       verifyLetters[i].style.backgroundColor = "#df2222ff";
     }
   }
