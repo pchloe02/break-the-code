@@ -4,8 +4,10 @@ import {
   checkTheCode,
   verifyCode,
 } from "./functions.js";
+import { startTimer, stopTimer, getTimer, renderTimer } from "./timer.js";
 import { data } from "./constant.js";
 
+// DOM elements
 const inputsCode = document.querySelectorAll(".input-group");
 const form = document.getElementById("form-code");
 const verifyButton = document.getElementById("verify-button");
@@ -16,9 +18,25 @@ const verifyFourthLetter = document.getElementsByClassName("screen-letter")[3];
 const successMessage = document.getElementById("success-message");
 const errorMessage = document.getElementById("error-message");
 const startbutton = document.getElementById("start-btn");
+const timerElement = document.getElementById("timer");
 
+// Start state
 const generateRandomCode = getTheCode(data.alphabet);
-console.log("Generated Code:", generateRandomCode);
+let timerDuration = 90;
+renderTimer(timerElement, timerDuration);
+// console.log("Generated Code:", generateRandomCode);
+document.querySelectorAll("input").forEach((input) => (input.disabled = true));
+document.querySelectorAll("button").forEach((btn) => {
+  if (btn !== startbutton) btn.disabled = true;
+});
+
+inputsCode.forEach((inputGroup) => {
+  const input = inputGroup.querySelector(".code-input");
+  if (input) {
+    const randomIndex = Math.floor(Math.random() * data.alphabet.length);
+    input.value = data.alphabet[randomIndex];
+  }
+});
 
 inputsCode.forEach((inputGroup) => {
   const input = inputGroup.querySelector(".code-input");
@@ -28,10 +46,16 @@ inputsCode.forEach((inputGroup) => {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    checkTheCode(getInputsValues(inputsCode), generateRandomCode, inputsCode, {
-      successMessage,
-      errorMessage,
-    });
+    checkTheCode(
+      getInputsValues(inputsCode),
+      generateRandomCode,
+      {
+        successMessage,
+        errorMessage,
+      },
+      stopTimer,
+      getTimer
+    );
   });
 
   verifyButton.addEventListener("click", () => {
@@ -44,45 +68,8 @@ inputsCode.forEach((inputGroup) => {
   });
 });
 
-document.querySelectorAll("input").forEach((input) => (input.disabled = true));
-document.querySelectorAll("button").forEach((btn) => {
-  if (btn !== startbutton) btn.disabled = true;
-});
-inputsCode.forEach((inputGroup) => {
-  const input = inputGroup.querySelector(".code-input");
-  if (input) {
-    const randomIndex = Math.floor(Math.random() * data.alphabet.length);
-    input.value = data.alphabet[randomIndex];
-  }
-});
-
-const timerElement = document.getElementById("timer");
-const duration = 60;
-const start = Date.now();
-
-const updateTimer = () => {
-  const now = Date.now();
-  const elapsed = Math.floor((now - start) / 1000);
-  const remaining = Math.max(0, duration - elapsed);
-  const min = Math.floor(remaining / 60);
-  const sec = remaining % 60;
-  timerElement.textContent = `${min}:${sec.toString().padStart(2, "0")}`;
-  if (remaining > 0) {
-    setTimeout(updateTimer, 200);
-  } else {
-    timerElement.textContent = "X_X";
-    errorMessage.textContent = "Game over, you failed to defuse the bomb.";
-    errorMessage.style.color = "red";
-
-    document.querySelectorAll("button").forEach((btn) => (btn.disabled = true));
-    document
-      .querySelectorAll("input")
-      .forEach((input) => (input.disabled = true));
-  }
-};
-
 startbutton.addEventListener("click", () => {
-  updateTimer();
+  startTimer(timerElement, errorMessage, timerDuration);
   startbutton.style.display = "none";
   document.querySelectorAll("button").forEach((btn) => (btn.disabled = false));
   document
