@@ -9,6 +9,7 @@ export const renderTimer = (timerElement, time) => {
 };
 
 export const startTimer = (timerElement, errorMessage, time) => {
+  timerDuration = time;
   timerStart = Date.now();
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
@@ -42,7 +43,17 @@ export const resetTimer = (time, timerElement) => {
 };
 
 export const getTimer = () => {
+  const finalTimer = (total) => ({
+    total_remaining: {
+      total,
+      minutes: Math.floor(total / 60),
+      seconds: total % 60,
+    },
+  });
+
+  if (!timerStart) return finalTimer(timerDuration);
   const now = Date.now();
   const elapsed = Math.floor((now - timerStart) / 1000);
-  return Math.max(0, timerDuration - elapsed);
+  const remaining = Math.max(0, timerDuration - elapsed);
+  return finalTimer(remaining);
 };
