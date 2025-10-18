@@ -27,7 +27,7 @@ export const checkTheCode = (
   if (playerCode.length === 4) {
     if (playerCode === generateRandomCode) {
       stopTimer();
-      localStorage.setItem("time-remaining", getTimer());
+      localStorage.setItem("time-remaining", JSON.stringify(getTimer()));
 
       message.successMessage.textContent =
         "Congratulations, you have defused the bomb!";
