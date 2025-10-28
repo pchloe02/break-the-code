@@ -157,3 +157,68 @@ button:disabled:active {
   transform: none !important;
   background: #888 !important;
 }
+
+#scoreboard-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 10020;
+  padding: 8px 12px;
+  margin: 8px 2px;
+  border-radius: 4px;
+}
+
+#scoreboard-popup {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 320px;
+  max-height: 60vh;
+  overflow: auto;
+  z-index: 10010;
+  background: rgba(18, 18, 18, 0.98);
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  display: none;
+  font-family: inherit;
+}
+
+#scoreboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+#scoreboard-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#scoreboard-list {
+  font-family: "DS-Digital", sans-serif;
+  font-size: 14px;
+}
+
+.scoreboard-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.scoreboard-item:last-child {
+  border-bottom: none;
+}
+
+.scoreboard-item .meta {
+  color: #cfcfcf;
+  font-size: 12px;
+
+  font-family: "Old-Newspapers", serif;
+}

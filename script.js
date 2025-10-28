@@ -19,15 +19,75 @@ const successMessage = document.getElementById("success-message");
 const errorMessage = document.getElementById("error-message");
 const startbutton = document.getElementById("start-btn");
 const timerElement = document.getElementById("timer");
+const scoreboardBtn = document.getElementById("scoreboard-btn");
+const scoreboardPopup = document.getElementById("scoreboard-popup");
+const scoreboardList = document.getElementById("scoreboard-list");
+
+const renderScoreboard = () => {
+  try {
+    const raw = localStorage.getItem("time-remaining");
+    if (!raw) return (scoreboardList.textContent = "No scores yet.");
+    const parsed = JSON.parse(raw);
+    const arr = Array.isArray(parsed)
+      ? parsed
+      : parsed && typeof parsed === "object"
+      ? [parsed]
+      : [];
+    if (!arr.length) return (scoreboardList.textContent = "No scores yet.");
+
+    const sortedScores = arr
+      .slice()
+      .sort((a, b) => (b.total || 0) - (a.total || 0));
+    scoreboardList.innerHTML = "";
+    sortedScores.forEach((it, idx) => {
+      const div = document.createElement("div");
+      div.className = "scoreboard-item";
+      const left = document.createElement("div");
+      left.innerHTML = `<div>${idx + 1}. ${
+        it.name_player || "Player"
+      }</div><div class="meta">${it.timer || ""}</div>`;
+      const right = document.createElement("div");
+      right.innerHTML = `<div class="meta">${
+        it.total != null ? it.total + "s" : ""
+      }</div>`;
+      div.appendChild(left);
+      div.appendChild(right);
+      scoreboardList.appendChild(div);
+    });
+  } catch (e) {
+    scoreboardList.textContent = "Unable to read scores.";
+  }
+};
+
+const openScoreboard = () => {
+  renderScoreboard();
+  scoreboardPopup.style.display = "block";
+  scoreboardBtn.setAttribute("aria-expanded", "true");
+  scoreboardPopup.setAttribute("aria-hidden", "false");
+};
+
+const closeScoreboard = () => {
+  scoreboardPopup.style.display = "none";
+  scoreboardBtn.setAttribute("aria-expanded", "false");
+  scoreboardPopup.setAttribute("aria-hidden", "true");
+};
+
+if (scoreboardBtn && scoreboardPopup) {
+  scoreboardBtn.addEventListener("click", () => {
+    const isOpen = scoreboardPopup.style.display === "block";
+    if (isOpen) closeScoreboard();
+    else openScoreboard();
+  });
+}
 
 // Start state
 const generateRandomCode = getTheCode(data.alphabet);
 let timerDuration = 90;
 renderTimer(timerElement, timerDuration);
-// console.log("Generated Code:", generateRandomCode);
+console.log("Generated Code:", generateRandomCode);
 document.querySelectorAll("input").forEach((input) => (input.disabled = true));
 document.querySelectorAll("button").forEach((btn) => {
-  if (btn !== startbutton) btn.disabled = true;
+  if (btn !== startbutton && btn !== scoreboardBtn) btn.disabled = true;
 });
 
 inputsCode.forEach((inputGroup) => {

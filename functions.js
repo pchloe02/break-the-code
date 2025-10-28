@@ -27,16 +27,42 @@ export const checkTheCode = (
   if (playerCode.length === 4) {
     if (playerCode === generateRandomCode) {
       stopTimer();
-      localStorage.setItem("time-remaining", JSON.stringify(getTimer()));
+      try {
+        const key = "time-remaining";
+        const entry = getTimer();
+        const raw = localStorage.getItem(key);
+        let parsed = null;
+        try {
+          parsed = raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          parsed = null;
+        }
+
+        const last = Array.isArray(parsed) ? parsed[parsed.length - 1] : null;
+
+        const next = Array.isArray(parsed)
+          ? last && last.total === entry.total && last.timer === entry.timer
+            ? parsed
+            : parsed.concat(entry)
+          : parsed && typeof parsed === "object"
+          ? parsed.total === entry.total && parsed.timer === entry.timer
+            ? [parsed]
+            : [parsed, entry]
+          : [entry];
+
+        if (next !== parsed) localStorage.setItem(key, JSON.stringify(next));
+      } catch (err) {
+        console.error("append time-remaining error:", err);
+      }
 
       message.successMessage.textContent =
         "Congratulations, you have defused the bomb!";
       message.successMessage.style.color = "#4bff4b";
       message.errorMessage.textContent = "";
 
-      document
-        .querySelectorAll("button")
-        .forEach((btn) => (btn.disabled = true));
+      document.querySelectorAll("button").forEach((btn) => {
+        if (btn.id !== "scoreboard-btn") btn.disabled = true;
+      });
       document
         .querySelectorAll("input")
         .forEach((input) => (input.disabled = true));
