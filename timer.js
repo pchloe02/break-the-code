@@ -23,9 +23,9 @@ export const startTimer = (timerElement, errorMessage, time) => {
       timerElement.textContent = "X_X";
       errorMessage.style.color = "red";
       errorMessage.textContent = "Game over, you failed to defuse the bomb.";
-      document
-        .querySelectorAll("button")
-        .forEach((btn) => (btn.disabled = true));
+      document.querySelectorAll("button").forEach((btn) => {
+        if (btn.id !== "scoreboard-btn") btn.disabled = true;
+      });
       document
         .querySelectorAll("input")
         .forEach((input) => (input.disabled = true));
@@ -43,13 +43,33 @@ export const resetTimer = (time, timerElement) => {
 };
 
 export const getTimer = () => {
-  const finalTimer = (total) => ({
-    total_remaining: {
+  const finalTimer = (total) => {
+    let playerName = "Player";
+    try {
+      const raw = localStorage.getItem("time-remaining");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const count = Array.isArray(parsed)
+          ? parsed.length
+          : parsed && typeof parsed === "object"
+          ? 1
+          : 0;
+        playerName = `Player ${count + 1}`;
+      } else {
+        playerName = "Player 1";
+      }
+    } catch (e) {
+      playerName = "Player";
+    }
+
+    return {
+      name_player: playerName,
       total,
-      minutes: Math.floor(total / 60),
-      seconds: total % 60,
-    },
-  });
+      timer: `${Math.floor(total / 60)}:${(total % 60)
+        .toString()
+        .padStart(2, "0")}`,
+    };
+  };
 
   if (!timerStart) return finalTimer(timerDuration);
   const now = Date.now();
