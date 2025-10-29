@@ -83,3 +83,34 @@ export const verifyCode = (playerCode, generateRandomCode, verifyLetters) => {
     }
   }
 };
+
+export const selectLetterWithArrows = (input, upArrow, downArrow, alphabet) => {
+  const ensureIndex = (val) => {
+    if (!val) return 0;
+    const idx = alphabet.indexOf(val.toUpperCase());
+    return idx === -1 ? 0 : idx;
+  };
+
+  if (upArrow) {
+    upArrow.addEventListener("click", () => {
+      const currentLetter = input.value && input.value.toUpperCase();
+      const idx = ensureIndex(currentLetter);
+      const prevLetter = (idx - 1 + alphabet.length) % alphabet.length;
+      input.value = alphabet[prevLetter];
+
+      input.value = alphabet[nextLetter];
+      input.dispatchEvent(new Event("input"));
+    });
+  }
+
+  if (downArrow) {
+    downArrow.addEventListener("click", () => {
+      const currentLetter = input.value && input.value.toUpperCase();
+      const idx = ensureIndex(currentLetter);
+      const nextLetter = (idx + 1) % alphabet.length;
+      input.value = alphabet[nextLetter];
+
+      input.dispatchEvent(new Event("input"));
+    });
+  }
+};
