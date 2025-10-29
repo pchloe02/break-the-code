@@ -22,7 +22,7 @@ export const startTimer = (timerElement, errorMessage, time) => {
       stopTimer();
       timerElement.textContent = "X_X";
       errorMessage.style.color = "red";
-      errorMessage.textContent = "Game over, you failed to defuse the bomb.";
+      errorMessage.textContent = "Game over, you failed to save my files...";
       document.querySelectorAll("button").forEach((btn) => {
         if (btn.id !== "scoreboard-btn") btn.disabled = true;
       });

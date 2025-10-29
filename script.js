@@ -6,6 +6,7 @@ import {
   selectLetterWithArrows,
 } from "./functions.js";
 import { startTimer, stopTimer, getTimer, renderTimer } from "./timer.js";
+import { setupScoreboard } from "./scoreboard.js";
 import { data } from "./constant.js";
 
 // DOM elements
@@ -16,71 +17,52 @@ const verifyFirstLetter = document.getElementsByClassName("screen-letter")[0];
 const verifySecondLetter = document.getElementsByClassName("screen-letter")[1];
 const verifyThirdLetter = document.getElementsByClassName("screen-letter")[2];
 const verifyFourthLetter = document.getElementsByClassName("screen-letter")[3];
-const successMessage = document.getElementById("success-message");
 const errorMessage = document.getElementById("error-message");
 const startbutton = document.getElementById("start-btn");
 const timerElement = document.getElementById("timer");
 const scoreboardBtn = document.getElementById("scoreboard-btn");
 const scoreboardPopup = document.getElementById("scoreboard-popup");
 const scoreboardList = document.getElementById("scoreboard-list");
+const winPopup = document.getElementById("win-popup");
+const winPopupText = document.getElementById("win-popup-text");
+const winPopupImg = document.getElementById("win-popup-img");
+const restartBtn = document.getElementById("restart");
 
-// change files
-const renderScoreboard = () => {
+setupScoreboard(scoreboardBtn, scoreboardPopup, scoreboardList);
+
+const proxy = "https://corsproxy.io/?";
+const apiUrl = "https://random-d.uk/api/v2/random";
+
+let prefetchedDuckUrl = null;
+let preloadedDuckImage = null;
+
+const prefetchDuckImage = async () => {
   try {
-    const raw = localStorage.getItem("time-remaining");
-    if (!raw) return (scoreboardList.textContent = "No scores yet.");
-    const parsed = JSON.parse(raw);
-    const arr = Array.isArray(parsed)
-      ? parsed
-      : parsed && typeof parsed === "object"
-      ? [parsed]
-      : [];
-    if (!arr.length) return (scoreboardList.textContent = "No scores yet.");
-
-    const sortedScores = arr
-      .slice()
-      .sort((a, b) => (b.total || 0) - (a.total || 0));
-    scoreboardList.innerHTML = "";
-    sortedScores.forEach((it, idx) => {
-      const div = document.createElement("div");
-      div.className = "scoreboard-item";
-      const left = document.createElement("div");
-      left.innerHTML = `<div>${idx + 1}. ${
-        it.name_player || "Player"
-      }</div><div class="meta">${it.timer || ""}</div>`;
-      const right = document.createElement("div");
-      right.innerHTML = `<div class="meta">${
-        it.total != null ? it.total + "s" : ""
-      }</div>`;
-      div.appendChild(left);
-      div.appendChild(right);
-      scoreboardList.appendChild(div);
-    });
-  } catch (e) {
-    scoreboardList.textContent = "Unable to read scores.";
+    const res = await fetch(proxy + encodeURIComponent(apiUrl));
+    const data = await res.json();
+    if (data && data.url) {
+      prefetchedDuckUrl = data.url;
+      const img = new Image();
+      img.src = data.url;
+      preloadedDuckImage = img;
+    }
+  } catch (err) {
+    prefetchedDuckUrl = null;
+    preloadedDuckImage = null;
   }
 };
 
-const openScoreboard = () => {
-  renderScoreboard();
-  scoreboardPopup.style.display = "block";
-  scoreboardBtn.setAttribute("aria-expanded", "true");
-  scoreboardPopup.setAttribute("aria-hidden", "false");
+const fetchDuckUrl = async () => {
+  try {
+    const res = await fetch(proxy + encodeURIComponent(apiUrl));
+    const data = await res.json();
+    return data && data.url ? data.url : null;
+  } catch (err) {
+    console.warn("fetchDuckUrl failed:", err);
+    return null;
+  }
 };
-
-const closeScoreboard = () => {
-  scoreboardPopup.style.display = "none";
-  scoreboardBtn.setAttribute("aria-expanded", "false");
-  scoreboardPopup.setAttribute("aria-hidden", "true");
-};
-
-if (scoreboardBtn && scoreboardPopup) {
-  scoreboardBtn.addEventListener("click", () => {
-    const isOpen = scoreboardPopup.style.display === "block";
-    if (isOpen) closeScoreboard();
-    else openScoreboard();
-  });
-}
+prefetchDuckImage();
 
 // Start state
 const generateRandomCode = getTheCode(data.alphabet);
@@ -114,16 +96,47 @@ inputsCode.forEach((inputGroup) => {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    checkTheCode(
+    const isWin = checkTheCode(
       getInputsValues(inputsCode),
       generateRandomCode,
       {
-        successMessage,
         errorMessage,
       },
       stopTimer,
       getTimer
     );
+
+    if (isWin) {
+      if (winPopupText) {
+        winPopupText.textContent = "Thank you! You saved my favorite file!";
+      }
+
+      if (winPopup) {
+        winPopup.style.display = "flex";
+        winPopup.setAttribute("aria-hidden", "false");
+      }
+
+      if (winPopupImg) {
+        winPopupImg.innerHTML = "";
+
+        if (preloadedDuckImage) {
+          winPopupImg.appendChild(preloadedDuckImage.cloneNode(true));
+        } else if (prefetchedDuckUrl) {
+          const imgEl = new Image();
+          imgEl.src = prefetchedDuckUrl;
+          winPopupImg.appendChild(imgEl);
+        } else {
+          fetchDuckUrl()
+            .then((url) => {
+              if (!url) return;
+              const imgEl = new Image();
+              imgEl.src = url;
+              winPopupImg.appendChild(imgEl);
+            })
+            .catch((err) => console.warn("duck fetch failed:", err));
+        }
+      }
+    }
   });
 
   verifyButton.addEventListener("click", () => {
@@ -144,3 +157,15 @@ startbutton.addEventListener("click", () => {
     .querySelectorAll("input")
     .forEach((input) => (input.disabled = false));
 });
+
+if (restartBtn) {
+  restartBtn.addEventListener("click", () => {
+    const winPopupEl = document.getElementById("win-popup");
+    if (winPopupEl) {
+      winPopupEl.style.display = "none";
+      winPopupEl.setAttribute("aria-hidden", "true");
+    }
+
+    window.location.reload();
+  });
+}
