@@ -3,6 +3,7 @@ import {
   getTheCode,
   checkTheCode,
   verifyCode,
+  selectLetterWithArrows,
 } from "./functions.js";
 import { startTimer, stopTimer, getTimer, renderTimer } from "./timer.js";
 import { data } from "./constant.js";
@@ -23,6 +24,7 @@ const scoreboardBtn = document.getElementById("scoreboard-btn");
 const scoreboardPopup = document.getElementById("scoreboard-popup");
 const scoreboardList = document.getElementById("scoreboard-list");
 
+// change files
 const renderScoreboard = () => {
   try {
     const raw = localStorage.getItem("time-remaining");
@@ -103,6 +105,12 @@ inputsCode.forEach((inputGroup) => {
   input.addEventListener("input", () => {
     input.value = input.value.toUpperCase().replace(/[^A-Z]/g, "");
   });
+
+  const upArrow = inputGroup.querySelector(".arrow-up");
+  const downArrow = inputGroup.querySelector(".arrow-down");
+  const alphabet = data.alphabet;
+
+  selectLetterWithArrows(input, upArrow, downArrow, alphabet);
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
