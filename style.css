@@ -8,18 +8,40 @@
   src: url("fonts/OldNewspaperTypes.ttf") format("truetype");
 }
 
+:root {
+  --color-bg: #111;
+  --color-text: #fff;
+  --color-bomb: #333;
+  --color-computer: #222;
+  --color-timer: #ff0000;
+  --color-timer-bg: #000;
+  --input-bg: #a4a891;
+  --screen-bg: #000;
+  --screen-letter-bg: #555;
+  --button-grad-start: #e0e0e0;
+  --button-grad-end: #b0b0b0;
+  --button-shadow: #888;
+  --button-disabled-bg: #888;
+  --button-disabled-text: #444;
+  --button-disabled-border: #666;
+  --popup-bg: rgba(18, 18, 18, 0.98);
+  --popup-shadow: rgba(0, 0, 0, 0.6);
+  --meta-color: #cfcfcf;
+  --scoreboard-border: rgba(255, 255, 255, 0.06);
+}
+
 body {
   margin: 0;
   padding: 0;
-  background-color: #111;
-  color: #fff;
+  background-color: var(--color-bg);
+  color: var(--color-text);
   font-family: "Old-Newspapers", serif;
   text-align: center;
 }
 .bomb {
   width: 450px;
   height: 230px;
-  background-color: #333;
+  background-color: var(--color-bomb);
   border-radius: 20px;
   position: relative;
   margin: 20px auto;
@@ -41,8 +63,8 @@ body {
 .timer {
   font-family: "DS-Digital", sans-serif;
   font-size: 48px;
-  color: #ff0000;
-  background-color: #000;
+  color: var(--color-timer);
+  background-color: var(--color-timer-bg);
   width: 100px;
   height: 50px;
   border-radius: 6px;
@@ -80,14 +102,14 @@ body {
   font-size: 60px;
   margin: 4px;
   text-align: center;
-  background-color: #a4a891;
+  background-color: var(--input-bg);
   color: #000;
 }
 
 .computer {
   width: 350px;
   height: 250px;
-  background-color: #222;
+  background-color: var(--color-computer);
 
   border-radius: 20px;
   margin: 20px auto;
@@ -100,7 +122,7 @@ body {
 .screen {
   width: 300px;
   height: 100px;
-  background-color: #000;
+  background-color: var(--screen-bg);
 
   border-radius: 10px;
   margin: 20px auto;
@@ -119,13 +141,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #555;
+  background-color: var(--screen-letter-bg);
 }
 button {
-  background: linear-gradient(180deg, #e0e0e0 0%, #b0b0b0 100%);
+  background: linear-gradient(
+    180deg,
+    var(--button-grad-start) 0%,
+    var(--button-grad-end) 100%
+  );
   border: none;
   border-radius: 4px;
-  box-shadow: 0 6px #888;
+  box-shadow: 0 6px var(--button-shadow);
   color: #222;
 
   font-family: "DS-Digital", sans-serif;
@@ -138,34 +164,28 @@ button {
 }
 
 button:active {
-  box-shadow: 0 2px #888;
+  box-shadow: 0 2px var(--button-shadow);
   transform: translateY(4px);
-  background: linear-gradient(180deg, #b0b0b0 0%, #e0e0e0 100%);
+  background: linear-gradient(
+    180deg,
+    var(--button-grad-end) 0%,
+    var(--button-grad-start) 100%
+  );
 }
 
 button:disabled {
-  background: #888 !important;
-  color: #444 !important;
+  background: var(--button-disabled-bg) !important;
+  color: var(--button-disabled-text) !important;
   box-shadow: none !important;
   cursor: not-allowed !important;
   opacity: 0.6;
-  border: 1px solid #666;
+  border: 1px solid var(--button-disabled-border);
 }
 
 button:disabled:active {
   box-shadow: none !important;
   transform: none !important;
   background: #888 !important;
-}
-
-#scoreboard-btn {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 10020;
-  padding: 8px 12px;
-  margin: 8px 2px;
-  border-radius: 4px;
 }
 
 #scoreboard-popup {
@@ -176,13 +196,20 @@ button:disabled:active {
   max-height: 60vh;
   overflow: auto;
   z-index: 10010;
-  background: rgba(18, 18, 18, 0.98);
-  color: #fff;
+  background: var(--popup-bg);
+  color: var(--color-text);
   border-radius: 8px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 30px var(--popup-shadow);
   padding: 10px;
-  display: none;
+  display: none; /* toggled by JS */
   font-family: inherit;
+}
+
+#scoreboard-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 10020;
 }
 
 #scoreboard-header {
@@ -209,7 +236,7 @@ button:disabled:active {
   display: flex;
   justify-content: space-between;
   padding: 6px 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--scoreboard-border);
 }
 
 .scoreboard-item:last-child {
