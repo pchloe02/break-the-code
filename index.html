@@ -4,12 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Break the code</title>
+    <title>Save the files</title>
   </head>
   <body>
-
-    </div>
-    <h1>Break the code to defuse the bomb</h1>
+    <h1>Agent! We need you.</h1>
+    <h2>Open the vault and save the files before they self-destruct!</h2>
     <p>
       Click on <strong>Verify</strong> to ensure your code is correct, if the
       screen display <span style="color: red">red</span> the letter position is
@@ -72,7 +71,7 @@
         <p id="message"></p>
       </div>
     </div>
-        <div id="success-message" class="message"></div>
+    <!-- inline success area removed: we now use the win popup modal -->
     <div id="error-message" class="message"></div>
     <div id="agent-computer" class="computer">
       <div id="screen" class="screen">
@@ -83,16 +82,43 @@
       </div>
       <button id="verify-button">Verify</button>
     </div>
-    <button id="scoreboard-btn" aria-haspopup="dialog" aria-expanded="false" title="Open scoreboard">Scoreboard</button>
+    <button
+      id="scoreboard-btn"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      title="Open scoreboard"
+    >
+      Scoreboard
+    </button>
 
-    <div id="scoreboard-popup" role="dialog" aria-label="Scoreboard" aria-hidden="true">
+    <div
+      id="scoreboard-popup"
+      role="dialog"
+      aria-label="Scoreboard"
+      aria-hidden="true"
+    >
       <div id="scoreboard-header">
         <strong>Scoreboard</strong>
       </div>
       <div id="scoreboard-list">No scores yet.</div>
     </div>
+
+    <!-- Win popup: shown when the player wins -->
+    <div
+      id="win-popup"
+      role="dialog"
+      aria-label="You win"
+      aria-hidden="true"
+      style="display: none"
+    >
+      <div id="win-popup-overlay"></div>
+      <div id="win-popup-content" role="document">
+        <p id="win-popup-text" class="success-text"></p>
+        <div id="win-popup-img" class="win-img"></div>
+        <button id="restart">Restart</button>
+      </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
   </body>
 </html>
-<script src="functions.js" type="module"></script>
-<script src="script.js" type="module"></script>
-<script src="constant.js" type="module"></script>

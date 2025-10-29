@@ -201,7 +201,7 @@ button:disabled:active {
   border-radius: 8px;
   box-shadow: 0 8px 30px var(--popup-shadow);
   padding: 10px;
-  display: none; /* toggled by JS */
+  display: none;
   font-family: inherit;
 }
 
@@ -248,4 +248,114 @@ button:disabled:active {
   font-size: 12px;
 
   font-family: "Old-Newspapers", serif;
+}
+
+.win-img {
+  display: inline-block;
+  max-width: 260px;
+  width: 90%;
+  height: auto;
+  margin: 10px auto;
+  padding: 8px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 4px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+}
+
+.win-img img {
+  display: block;
+  width: 100%;
+  height: 180px; /* fixed frame height for consistent look */
+  object-fit: cover; /* crop nicely to frame */
+  border-radius: 6px;
+}
+
+@media (min-width: 800px) {
+  .win-img {
+    max-width: 320px;
+  }
+  .win-img img {
+    height: 220px;
+  }
+}
+
+.success-text {
+  margin: 6px 0;
+  font-size: 16px;
+  color: #4bff4b;
+}
+
+#win-popup {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10050;
+}
+
+#win-popup[aria-hidden="false"],
+#win-popup.show {
+  display: flex;
+}
+
+#win-popup-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+#win-popup-content {
+  position: relative;
+  background: var(--popup-bg);
+  color: var(--color-text);
+  border-radius: 12px;
+  padding: 18px;
+  width: min(90%, 420px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  z-index: 10060;
+  text-align: center;
+}
+
+#win-popup-close {
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#win-popup-img {
+  margin-top: 12px;
+}
+
+#win-popup-content #restart {
+  display: block;
+  margin: 14px auto 0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: linear-gradient(
+    180deg,
+    var(--button-grad-start),
+    var(--button-grad-end)
+  );
+  color: #222;
+  box-shadow: 0 6px var(--button-shadow);
+  cursor: pointer;
+}
+
+#win-popup-content #restart:active {
+  box-shadow: 0 2px var(--button-shadow);
+  transform: translateY(4px);
 }
